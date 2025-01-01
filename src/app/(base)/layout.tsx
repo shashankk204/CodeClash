@@ -7,9 +7,11 @@ export default function Layout({
 }>) {
   return (
     
-        <div className="min-h-screen w-screen flex flex-col">
+        <div className="flex min-h-screen flex-col ">
             <NavBar></NavBar>
-            <div className="mx-auto max-w-7xl p-5">{children}</div>
+            <div className="mx-auto flex w-full max-w-7xl grow gap-5 p-5 ">
+              {children}
+            </div>
         </div>
     
         

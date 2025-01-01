@@ -14,8 +14,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import UserAvatar from './UserAvatar'
-import { LogOutIcon, Mail, MailIcon, MessageSquare, Monitor, Moon, PlusCircle, Sun, UserIcon, UserPlus } from 'lucide-react'
+import { Check, LogOutIcon, Monitor, Moon, Sun, TicketCheck, TicketCheckIcon, UserIcon, UserPlus } from 'lucide-react'
 import Link from 'next/link'
+import { useTheme } from 'next-themes'
 
 interface UserBottomProps {
     className?: string
@@ -25,16 +26,13 @@ interface UserBottomProps {
 function UserButton({ className }: UserBottomProps) {
     // const url="https://github.com/shadcn.png";
     // const hmm=;
-
+    const {theme,setTheme}=useTheme();
     const UserName = "dummy";
-
     return (
         <div>
-
             <DropdownMenu >
                 <DropdownMenuTrigger className='rounded-full' >
-
-                    <UserAvatar url={"dummy data"}></UserAvatar>
+                    <UserAvatar url={undefined}></UserAvatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
 
@@ -65,26 +63,46 @@ function UserButton({ className }: UserBottomProps) {
                         <span> Logout </span>
                     </DropdownMenuItem>
 
+
+
                     <DropdownMenuSeparator />
+
+
+
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
-                            <UserPlus />
-                            <span>Invite users</span>
+                            <Monitor />
+                            <span>Theme</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                                <DropdownMenuItem>
+                                
+                                
+                                <DropdownMenuItem onClick={()=>{setTheme("light")}}>
                                     <Sun />
                                     <span>Light</span>
+                                    {(theme==="light")?<Check />:<></>}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
+
+
+                                <DropdownMenuItem onClick={()=>{setTheme("dark")}}>
                                     <Moon />
-                                    <span>Dark</span>
+                                    <span> Dark</span>
+                                    {(theme==="dark")?<Check />:<></>}
+
                                 </DropdownMenuItem>
+
+                                
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
+
+
+                                <DropdownMenuItem onClick={()=>{setTheme("system")}}>
                                     <Monitor />
-                                    <span className='px-1'>System Default</span>
+                                    <span className='px-1'>
+                                        System Default
+                                    </span>
+                                    {(theme==="system")?<Check />:<></>}
+
                                 </DropdownMenuItem>
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
