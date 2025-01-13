@@ -1,27 +1,39 @@
 "use server"
+import prisma from "@/lib/db";
 import { SignUpValues } from "@/lib/zod";
-import { redirect } from "next/navigation";
+import bcrypt from "bcrypt";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { AuthError } from "next-auth";
+import { signIn } from "@/lib/auth";
 
-
-export default async function HandleSignup(vale:SignUpValues){
+export default async function HandleSignup(value:SignUpValues){
 
 
     try {
-        let val=false;
-        await new Promise((resolve,reject)=>{setTimeout(() => {
-            resolve(true)
-        }, 5000);})
-        
-        if(!val)
+       const UserExist=await prisma.user.findFirst({
+        where:{
+            OR:[
+                {email:value.email},
+                {username:value.username}
+
+            ]
+        }})        
+        if(UserExist)
         {
-            return {error:"something was off"}
+            if(UserExist.email===value.email) throw Error("Email alreaedy in use")
+            else throw Error("Username Already Taken");
         }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(value.password, salt);
+        const newuser=await prisma.user.create({data:{email:value.email,username:value.username,displayname:value.username,passwordHash:hashedPassword}});
         
+        await signIn("credentials",{username:newuser.username,password:value.password,redirectTo:'/'})
+
     } catch (error:any) {
-        console.log(error);
+        if(isRedirectError(error)) throw error
+        if(error instanceof AuthError) return {error:error.cause?.err?.message}
         return {error:error.message}
     }
-    return redirect("/");
 
 
 }

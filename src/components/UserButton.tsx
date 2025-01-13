@@ -17,6 +17,8 @@ import UserAvatar from './UserAvatar'
 import { Check, LogOutIcon, Monitor, Moon, Sun, TicketCheck, TicketCheckIcon, UserIcon, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
+import logout from '@/app/(auth)/action'
+import { useSession } from 'next-auth/react'
 
 interface UserBottomProps {
     className?: string
@@ -25,19 +27,19 @@ interface UserBottomProps {
 
 function UserButton({ className }: UserBottomProps) {
     // const url="https://github.com/shadcn.png";
-    // const hmm=;
     const {theme,setTheme}=useTheme();
     const UserName = "dummy";
+    const user=useSession();
     return (
         <div>
             <DropdownMenu >
-                <DropdownMenuTrigger className='rounded-full' >
+                <DropdownMenuTrigger className='rounded-full' disabled={user.status==="loading"}>
                     <UserAvatar url={undefined}></UserAvatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
 
                     <DropdownMenuLabel>
-                        Hello @DummyUser
+                        Hello {user.data?.user?.name}
                     </DropdownMenuLabel>
 
 
@@ -58,7 +60,7 @@ function UserButton({ className }: UserBottomProps) {
 
 
 
-                    <DropdownMenuItem onClick={() => { console.log("logged out") }}>
+                    <DropdownMenuItem onClick={async () => { await logout() }}>
                         <LogOutIcon />
                         <span> Logout </span>
                     </DropdownMenuItem>

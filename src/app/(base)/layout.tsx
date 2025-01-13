@@ -1,11 +1,15 @@
+import { auth } from "@/lib/auth";
 import MenuBar from "./MenuBar";
 import NavBar from "./NavBar";
+import { redirect } from "next/navigation";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user=await auth()
+  if(!user) redirect('/login');
   return (
     
         <div className="flex min-h-screen flex-col ">
