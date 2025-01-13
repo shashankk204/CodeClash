@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import logout from '@/app/(auth)/action'
 import { useSession } from 'next-auth/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface UserBottomProps {
     className?: string
@@ -26,7 +27,8 @@ interface UserBottomProps {
 }
 
 function UserButton({ className }: UserBottomProps) {
-    // const url="https://github.com/shadcn.png";
+    const queryClient=useQueryClient();
+    // const url="https://github.com/;shadcn.png";
     const {theme,setTheme}=useTheme();
     const UserName = "dummy";
     const user=useSession();
@@ -47,7 +49,7 @@ function UserButton({ className }: UserBottomProps) {
 
 
                     <DropdownMenuItem >
-                        <Link href={`/users/${UserName}`} className='flex space-x-2' >
+                        <Link href={`/users/${user.data?.user?.name}`} className='flex space-x-2' >
                             <UserIcon />
                             <span>
                                 Profile
@@ -60,7 +62,9 @@ function UserButton({ className }: UserBottomProps) {
 
 
 
-                    <DropdownMenuItem onClick={async () => { await logout() }}>
+                    <DropdownMenuItem onClick={async () => {
+                        queryClient.clear();
+                        await logout() }}>
                         <LogOutIcon />
                         <span> Logout </span>
                     </DropdownMenuItem>

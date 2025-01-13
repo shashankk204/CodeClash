@@ -10,7 +10,6 @@ export default async function Layout({
 
 
     const user=await auth();
-    console.log(user)
     if(user) redirect('/');
 
     

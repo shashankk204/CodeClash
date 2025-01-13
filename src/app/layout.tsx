@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from 'next-auth/react';
+import ReactQueryProvider from "./ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,20 +32,23 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
+          <ReactQueryProvider>
 
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem={true}
-            disableTransitionOnChange={true}
-          >
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem={true}
+              disableTransitionOnChange={true}
+            >
 
-            <div className="overflow-hidden">
+              <div className="overflow-hidden">
 
-              {children}
-            </div>
-            <Toaster />
-          </ThemeProvider>
+                {children}
+              </div>
+            </ThemeProvider>
+          </ReactQueryProvider>
+          <Toaster />
+
         </SessionProvider>
       </body>
     </html>

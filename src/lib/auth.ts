@@ -38,8 +38,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     session({ session, token }) {
 
-      if (token.sub) session.userId = token.sub
-      return session
+      if (token.sub) 
+        {
+          session.userId = token.sub
+          session.user.id=token.sub
+        }
+          return session
     },
     
 
