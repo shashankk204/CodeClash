@@ -37,8 +37,10 @@ export default function RootLayout({
             disableTransitionOnChange={true}
           >
 
-        
+          <div className="overflow-hidden">
+
             {children}
+          </div>
             <Toaster/>
           </ThemeProvider>
       </body>
