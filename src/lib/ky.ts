@@ -1,13 +1,11 @@
-import ky from "ky"
+import ky from "ky";
 
-const kyinst = ky.create({
-    parseJson(text){
-        JSON.parse(text,(key,value)=>{
-            if(key.endsWith("At")) return new Date(value);
-            return value;
-        })
-    }
-})
+const kyInstance = ky.create({
+  parseJson: (text) =>
+    JSON.parse(text, (key, value) => {
+      if (key.endsWith("At")) return new Date(value);
+      return value;
+    }),
+});
 
-
-export default kyinst;
+export default kyInstance;
