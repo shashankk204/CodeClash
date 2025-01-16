@@ -1,14 +1,28 @@
 import { Button } from '@/components/ui/button'
+import { auth } from '@/lib/auth'
 import prisma from '@/lib/db'
 import { Bell, Bookmark, HomeIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import NotificationsButton from './NotificationButton'
 
 interface MenuProp{
     className:string
 }
 
-function MenuBar({className}:MenuProp) {
+async function MenuBar({className}:MenuProp) {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) return null;
+  
+  
+  const unreadNotificationCount = await prisma.notification.count({
+    where: {
+      recipientId: session.user.id,
+      read: false,
+    },
+  });
+
   return (
     <div className={className}>
         <Button variant={"ghost"} className='flex items-center justify-start gap-3' asChild>
@@ -18,10 +32,11 @@ function MenuBar({className}:MenuProp) {
         </Button>
 
         <Button variant={"ghost"} className='flex items-center justify-start gap-3' asChild>
-          <Link href={'/notifications'} className=''>
-            <Bell></Bell> <span className='hidden lg:inline'>Notification</span>
-          </Link>
+        <NotificationsButton
+        initialState={{ unreadCount: unreadNotificationCount }}
+      />
         </Button>
+      
 
         <Button variant={"ghost"} className='flex items-center justify-start gap-3' asChild>
           <Link href={'/bookmarks'} className=''>

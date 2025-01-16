@@ -55,23 +55,32 @@ export async function POST(
   try {
     const session = await auth();
 
-    if (!session) {
+    if (!session || !session.user || !session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.follow.upsert({
-      where: {
-        followerId_followingId: {
-          followerId: session.user?.id||"",
+    await prisma.$transaction([
+      prisma.follow.upsert({
+        where: {
+          followerId_followingId: {
+            followerId: session.user.id,
+            followingId: userId,
+          },
+        },
+        create: {
+          followerId:session.user.id,
           followingId: userId,
         },
-      },
-      create: {
-        followerId: session.user?.id||"",
-        followingId: userId,
-      },
-      update: {},
-    });
+        update: {},
+      }),
+      prisma.notification.create({
+        data: {
+          issuerId: session.user.id,
+          recipientId: userId,
+          type: "FOLLOW",
+        },
+      }),
+    ]);
 
     return new Response();
   } catch (error) {
@@ -87,16 +96,25 @@ export async function DELETE(
   try {
     const session = await auth();
 
-    if (!session) {
+    if (!session || !session.user || !session.user.id)  {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.follow.deleteMany({
-      where: {
-        followerId: session.user?.id,
-        followingId: userId,
-      },
-    });
+    await prisma.$transaction([
+      prisma.follow.deleteMany({
+        where: {
+          followerId: session.user.id,
+          followingId: userId,
+        },
+      }),
+      prisma.notification.deleteMany({
+        where: {
+          issuerId: session.user.id,
+          recipientId: userId,
+          type: "FOLLOW",
+        },
+      }),
+    ]);
 
     return new Response();
   } catch (error) {

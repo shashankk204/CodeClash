@@ -1,37 +1,24 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { notificationsInclude, NotificationsPage } from "@/lib/types";
-import { NextRequest } from "next/server";
+import { NotificationCountInfo } from "@/lib/types";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-
-    const pageSize = 10;
-
     const session = await auth();
 
-    if (!session || !session.user || ! session.user.id
-    ) {
+    if (!session || !session.user || !session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const notifications = await prisma.notification.findMany({
+    const unreadCount = await prisma.notification.count({
       where: {
         recipientId: session.user.id,
+        read: false,
       },
-      include: notificationsInclude,
-      orderBy: { createdAt: "desc" },
-      take: pageSize + 1,
-      cursor: cursor ? { id: cursor } : undefined,
     });
 
-    const nextCursor =
-      notifications.length > pageSize ? notifications[pageSize].id : null;
-
-    const data: NotificationsPage = {
-      notifications: notifications.slice(0, pageSize),
-      nextCursor,
+    const data: NotificationCountInfo = {
+      unreadCount,
     };
 
     return Response.json(data);
