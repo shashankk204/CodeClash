@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { userDataSelect } from "@/lib/types";
+// import { userDataSelect } from "@/lib/types";
 import { formatNumber } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { unstable_cache } from "next/cache";
@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import UserAvatar from "./UserAvatar";
 import { Button } from "./ui/button";
 import { auth } from "@/lib/auth";
+import FollowButton from "./FollerButton";
+import { getUserDataSelect } from "@/lib/types";
 
 export default function TrendsSidebar() {
   return (
@@ -23,15 +25,20 @@ export default function TrendsSidebar() {
 async function WhoToFollow() {
   const session = await auth();
 
-  if (!session) return null;
+  if (!session || !session.user || !session.user.id) return null;
 
   const usersToFollow = await prisma.user.findMany({
     where: {
       NOT: {
-        id: session.user?.id,
+        id: session.user.id,
+      },
+      followers: {
+        none: {
+          followerId: session.user.id,
+        },
       },
     },
-    select: userDataSelect,
+    select: getUserDataSelect(session.user.id),
     take: 5,
   });
 
@@ -44,7 +51,7 @@ async function WhoToFollow() {
             href={`/users/${user.username}`}
             className="flex items-center gap-3"
           >
-            <UserAvatar url={user.avatarUrl || undefined} className="flex-none" />
+            <UserAvatar url={user.avatarUrl||undefined} className="flex-none" />
             <div>
               <p className="line-clamp-1 break-all font-semibold hover:underline">
                 {user.displayname}
@@ -54,12 +61,21 @@ async function WhoToFollow() {
               </p>
             </div>
           </Link>
-          <Button>Follow</Button>
+          <FollowButton
+            userId={user.id}
+            initialState={{
+              followers: user._count.followers,
+              isFollowedByUser: user.followers.some(
+                ({ followerId }) => followerId === user.id,
+              ),
+            }}
+          />
         </div>
       ))}
     </div>
   );
 }
+
 
 const getTrendingTopics = unstable_cache(
   async () => {

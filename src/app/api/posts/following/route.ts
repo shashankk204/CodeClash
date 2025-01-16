@@ -1,7 +1,6 @@
-
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
-import {  getPostDataInclude, PostsPage,  } from "@/lib/types";
+import { getPostDataInclude, PostsPage } from "@/lib/types";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -10,17 +9,26 @@ export async function GET(req: NextRequest) {
 
     const pageSize = 10;
 
-    const session = await auth()
+    const session = await auth();
 
     if (!session || !session.user || !session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const posts = await prisma.post.findMany({
-      include: getPostDataInclude(session.user?.id),
+      where: {
+        user: {
+          followers: {
+            some: {
+              followerId: session.user.id,
+            },
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
       take: pageSize + 1,
       cursor: cursor ? { id: cursor } : undefined,
+      include: getPostDataInclude(session.user.id),
     });
 
     const nextCursor = posts.length > pageSize ? posts[pageSize].id : null;
