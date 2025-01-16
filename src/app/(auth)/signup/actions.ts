@@ -29,10 +29,10 @@ export default async function HandleSignup(value:SignUpValues){
         
         await signIn("credentials",{username:newuser.username,password:value.password,redirectTo:'/'})
 
-    } catch (error:any) {
+    } catch (error) {
         if(isRedirectError(error)) throw error
         if(error instanceof AuthError) return {error:error.cause?.err?.message}
-        return {error:error.message}
+        return {error:(error as Error).message}
     }
 
 

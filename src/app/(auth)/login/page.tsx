@@ -10,7 +10,7 @@ function Login() {
         <div className='md:w-1/2 flex flex-col justify-center items-center w-full scroll-auto'>
           <div className='pt-10 text-3xl font-extrabold '>Login in to CodeClash</div>
           <div className='pt-10  w-full px-9'><LoginPage></LoginPage></div>
-          <div className='pt-5'>Don't have Account? <span className='hover:underline'><Link href={'/signup'}>Signup</Link></span></div>
+          <div className='pt-5'>{`Don't have Account?`} <span className='hover:underline'><Link href={'/signup'}>Signup</Link></span></div>
         </div>
 
         <div className='hidden md:w-1/2 md:block  '>

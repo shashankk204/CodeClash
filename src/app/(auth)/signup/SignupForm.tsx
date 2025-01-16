@@ -1,14 +1,13 @@
 "use client"
 import { signUpSchema, SignUpValues } from '@/lib/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { use, useState } from 'react'
+import React, {  useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth'
 import prisma from '@/lib/db'
-import { Bell, Bookmark, HomeIcon } from 'lucide-react'
+import {  Bookmark, HomeIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import NotificationsButton from './NotificationButton'
