@@ -1,11 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { submitPost } from "./action";
 import "./styles.css";
 import { useSession } from "next-auth/react";
 import { useSubmitPostMutation } from "./mutations";

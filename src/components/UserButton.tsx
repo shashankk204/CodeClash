@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import UserAvatar from './UserAvatar'
-import { Check, LogOutIcon, Monitor, Moon, Sun, TicketCheck, TicketCheckIcon, UserIcon, UserPlus } from 'lucide-react'
+import { Check, LogOutIcon, Monitor, Moon, Sun,   UserIcon  } from 'lucide-react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import logout from '@/app/(auth)/action'
@@ -28,11 +28,10 @@ interface UserBottomProps {
 
 function UserButton({ className }: UserBottomProps) {
     const queryClient=useQueryClient();
-    // const url="https://github.com/;shadcn.png";
     const {theme,setTheme}=useTheme();
-    const UserName = "dummy";
     const user=useSession();
-    return (
+    const bool=false;
+    return (bool?<div className={className}></div>:
         <div>
             <DropdownMenu >
                 <DropdownMenuTrigger className='rounded-full' disabled={user.status==="loading"}>

@@ -1,7 +1,5 @@
 import TrendsSidebar from "@/components/TrendsSidebar";
-import { Metadata } from "next";
 import SearchResults from "./SearchResults";
-import { useSearchParams } from "next/navigation";
 
 interface PageProps {
   searchParams: { q: string };

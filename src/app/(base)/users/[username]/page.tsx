@@ -1,6 +1,5 @@
 import FollowButton from "@/components/FollowButton";
 import TrendsSidebar from "@/components/TrendsSidebar";
-import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
 import prisma from "@/lib/db";
 import { FollowerInfo, getUserDataSelect, UserData } from "@/lib/types";

@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import Comment from "./Comment";
 import CommentInput from "./commentInput";
 import { Button } from "@/components/ui/button";
-import Linkify from "@/components/Linkify";
 
 interface CommentsProps {
   post: PostData;

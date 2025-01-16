@@ -8,7 +8,6 @@ import {
 import { submitPost } from "./action";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import { Loader2 } from "lucide-react";
 
 export function useSubmitPostMutation() {
     const { toast } = useToast();

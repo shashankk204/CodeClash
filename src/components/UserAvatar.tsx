@@ -1,10 +1,9 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Placeholder from "@/assets/AvatarPlaceHolder.jpeg"
 import { cn } from '@/lib/utils'
 
 interface AvatarProp{
-    className? : String,
+    className? : string,
     url?:string,
     size?:string
 

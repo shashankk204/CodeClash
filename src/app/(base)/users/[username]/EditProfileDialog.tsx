@@ -21,7 +21,6 @@ import {
   UpdateUserProfileValues,
 } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import  { StaticImageData } from "next/image";
 import { useForm } from "react-hook-form";
 import { useUpdateProfileMutation } from "./mutation";
 import { Textarea } from "@/components/ui/textarea";

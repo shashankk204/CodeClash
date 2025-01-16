@@ -20,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if(!user) throw Error("user does not exists");
         
         // @ts-ignore
-        let bool=await bcrypt.compare(password,user.passwordHash)
+        const bool=await bcrypt.compare(password,user.passwordHash)
         if(!bool) throw Error("Wrong password");          
         
         
