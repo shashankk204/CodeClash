@@ -2,7 +2,7 @@ import TrendsSidebar from "@/components/TrendsSidebar";
 import SearchResults from "./SearchResults";
 
 interface PageProps {
-  searchParams: { q: string };
+  searchParams: Promise<{ q: string }>;
 }
 
 export async function generateMetadata({ searchParams }: PageProps) {

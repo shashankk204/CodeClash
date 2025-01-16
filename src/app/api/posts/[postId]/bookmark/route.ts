@@ -4,7 +4,7 @@ import { BookmarkInfo } from "@/lib/types";
 
 export async function GET(
   req: Request,
-  { params: { postId } }: { params: { postId: string } },
+  { params  }: { params: Promise<{ postId: string }> },
 ) {
   try {
     const session= await auth();
@@ -12,7 +12,7 @@ export async function GET(
     if (!session || !session.user || !session.user.id ) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {postId}= await params
     const bookmark = await prisma.bookmark.findUnique({
       where: {
         userId_postId: {
@@ -35,7 +35,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { postId: string } },
+  { params }: { params: Promise<{ postId: string }> },
 ) {
   try {
     const session= await auth();
@@ -67,7 +67,7 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { postId: string } },
+  { params }: { params: Promise<{ postId: string }> },
 ) {
   try {
     const session= await auth();
