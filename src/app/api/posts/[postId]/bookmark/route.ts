@@ -35,7 +35,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params: { postId } }: { params: { postId: string } },
+  { params }: { params: { postId: string } },
 ) {
   try {
     const session= await auth();
@@ -43,7 +43,7 @@ export async function POST(
     if (!session || !session.user || !session.user.id ) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {postId}=await params
     await prisma.bookmark.upsert({
       where: {
         userId_postId: {
@@ -67,7 +67,7 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params: { postId } }: { params: { postId: string } },
+  { params }: { params: { postId: string } },
 ) {
   try {
     const session= await auth();
@@ -75,7 +75,7 @@ export async function DELETE(
     if (!session || !session.user || !session.user.id ) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {postId}=await params
     await prisma.bookmark.deleteMany({
       where: {
         userId: session.user.id,

@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params: { userId } }: { params: { userId: string } },
+  { params  }: { params: { userId: string } },
 ) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
@@ -17,7 +17,7 @@ export async function GET(
     if (!session || !session.user || !session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {userId}=await params
     const posts = await prisma.post.findMany({
       where: { userId },
       include: getPostDataInclude(session.user.id),

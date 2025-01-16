@@ -4,7 +4,7 @@ import { FollowerInfo } from "@/lib/types";
 
 export async function GET(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  { params  }: { params: { userId: string } },
 ) {
   try {
     const session = await auth();
@@ -12,7 +12,7 @@ export async function GET(
     if (!session) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {userId}=params
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -50,7 +50,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  { params  }: { params: { userId: string } },
 ) {
   try {
     const session = await auth();
@@ -58,7 +58,7 @@ export async function POST(
     if (!session || !session.user || !session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const {userId} = await params
     await prisma.$transaction([
       prisma.follow.upsert({
         where: {
@@ -91,7 +91,7 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  { params  }: { params: { userId: string } },
 ) {
   try {
     const session = await auth();
@@ -99,6 +99,8 @@ export async function DELETE(
     if (!session || !session.user || !session.user.id)  {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const {userId} = await params;
 
     await prisma.$transaction([
       prisma.follow.deleteMany({
