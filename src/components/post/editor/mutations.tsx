@@ -1,4 +1,3 @@
-// import { useToast } from "@/components/ui/use-toast";
 import { PostsPage } from "@/lib/types";
 import {
     InfiniteData,
@@ -16,7 +15,6 @@ export function useSubmitPostMutation() {
 
     const session=useSession();
 
-    if(session.status==='loading') return <Loader2 className="mx-auto my-3 animate-spin" />
 
     const queryClient = useQueryClient();
 

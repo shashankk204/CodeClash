@@ -34,12 +34,12 @@ const getUser = cache(async (username: string, loggedInUserId: string) => {
 });
 
 export async function generateMetadata({
-  params: { username },
+  params,
 }: PageProps): Promise<Metadata> {
   const sesssion = await auth();
 
   if (!sesssion || !sesssion.user || !sesssion.user.id) return {};
-
+  const {username}=await params
   const user = await getUser(username, sesssion.user.id );
 
   return {
@@ -47,7 +47,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { username } }: PageProps) {
+export default async function Page({params }: PageProps) {
   const sesssion= await auth();
 
   if (!sesssion || !sesssion.user || !sesssion.user.id) {
@@ -57,7 +57,8 @@ export default async function Page({ params: { username } }: PageProps) {
       </p>
     );
   }
-
+  
+  const {username}=await params
   const user = await getUser(username, sesssion.user.id);
 
   return (
