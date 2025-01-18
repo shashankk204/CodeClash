@@ -1,6 +1,5 @@
 "use client"
 
-import React from 'react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,12 +13,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import UserAvatar from './UserAvatar'
-import { Check, LogOutIcon, Monitor, Moon, Sun,   UserIcon  } from 'lucide-react'
-import Link from 'next/link'
+import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import logout from '@/app/(auth)/action'
-import { useSession } from 'next-auth/react'
 import { useQueryClient } from '@tanstack/react-query'
+import { redirect } from 'next/navigation'
+import useFixSession from "@/hooks/use-Fix-useSession"
 
 interface UserBottomProps {
     className?: string
@@ -27,14 +26,20 @@ interface UserBottomProps {
 }
 
 function UserButton({ className }: UserBottomProps) {
-    const queryClient=useQueryClient();
-    const {theme,setTheme}=useTheme();
-    const user=useSession();
-    const bool=false;
-    return (bool?<div className={className}></div>:
+    const queryClient = useQueryClient();
+    const { theme, setTheme } = useTheme();
+    let user = useFixSession();
+    
+
+    const bool = false;
+    
+    
+    
+
+    return (bool ? <div className={className}></div> :
         <div>
             <DropdownMenu >
-                <DropdownMenuTrigger className='rounded-full' disabled={user.status==="loading"}>
+                <DropdownMenuTrigger className='rounded-full' disabled={user.status === "loading"}>
                     <UserAvatar url={undefined}></UserAvatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -47,13 +52,9 @@ function UserButton({ className }: UserBottomProps) {
                     <DropdownMenuSeparator />
 
 
-                    <DropdownMenuItem >
-                        <Link href={`/users/${user.data?.user?.name}`} className='flex space-x-2' >
-                            <UserIcon />
-                            <span>
-                                Profile
-                            </span>
-                        </Link>
+                    <DropdownMenuItem onClick={async() => { redirect(`/users/${user.data?.user?.name}`) }}>
+                        <UserIcon />
+                        <span>Profile</span>
                     </DropdownMenuItem>
 
 
@@ -63,7 +64,8 @@ function UserButton({ className }: UserBottomProps) {
 
                     <DropdownMenuItem onClick={async () => {
                         queryClient.clear();
-                        await logout() }}>
+                        await logout()
+                    }}>
                         <LogOutIcon />
                         <span> Logout </span>
                     </DropdownMenuItem>
@@ -81,32 +83,32 @@ function UserButton({ className }: UserBottomProps) {
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                                
-                                
-                                <DropdownMenuItem onClick={()=>{setTheme("light")}}>
+
+
+                                <DropdownMenuItem onClick={() => { setTheme("light") }}>
                                     <Sun />
                                     <span>Light</span>
-                                    {(theme==="light")?<Check />:<></>}
+                                    {(theme === "light") ? <Check /> : <></>}
                                 </DropdownMenuItem>
 
 
-                                <DropdownMenuItem onClick={()=>{setTheme("dark")}}>
+                                <DropdownMenuItem onClick={() => { setTheme("dark") }}>
                                     <Moon />
                                     <span> Dark</span>
-                                    {(theme==="dark")?<Check />:<></>}
+                                    {(theme === "dark") ? <Check /> : <></>}
 
                                 </DropdownMenuItem>
 
-                                
+
                                 <DropdownMenuSeparator />
 
 
-                                <DropdownMenuItem onClick={()=>{setTheme("system")}}>
+                                <DropdownMenuItem onClick={() => { setTheme("system") }}>
                                     <Monitor />
                                     <span className='px-1'>
                                         System Default
                                     </span>
-                                    {(theme==="system")?<Check />:<></>}
+                                    {(theme === "system") ? <Check /> : <></>}
 
                                 </DropdownMenuItem>
                             </DropdownMenuSubContent>
