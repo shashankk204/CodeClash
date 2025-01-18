@@ -1,4 +1,4 @@
-import { getSession, SessionContextValue, useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 export default function useFixSession(){
